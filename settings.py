@@ -12,3 +12,6 @@ class Settings():
         self.screen_height = 600
         self.bg_color = (0,100,200)
 
+        # the speed of fighter
+        self.ship_speed_factor = 1.5
+
