@@ -19,7 +19,7 @@ def run_game():
     # initialize a group of bullets and aliens
     bullets = Group()
     aliens = Group()
-    gf.create_fleet(game_settings, screen, aliens)
+    gf.create_fleet(game_settings, screen, ship, aliens)
 
     # intialize a alien
     # alien = Alien(game_settings, screen)
@@ -33,6 +33,7 @@ def run_game():
         gf.check_events(game_settings, screen, ship, bullets)
         ship.update()
         gf.update_bullets(bullets)
+        gf.update_aliens(game_settings, aliens)
         gf.update_screen(game_settings, screen, ship, aliens, bullets)
 
 
