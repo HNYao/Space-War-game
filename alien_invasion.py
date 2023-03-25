@@ -2,6 +2,7 @@ import sys
 import pygame
 from settings import Settings
 from ship import Ship
+from pygame.sprite import Group
 import game_function as gf
 
 
@@ -14,15 +15,20 @@ def run_game():
     # initialize a fighter ship
     ship = Ship(game_settings, screen)
 
+    # initialize a group of bullets
+    bullets = Group()
+
     # set the color of background
     bg_color = (0,100,200)
 
     # the main loop of the game
     while True:
-        gf.check_events(ship)
+        gf.check_events(game_settings, screen, ship, bullets)
         ship.update()
-        gf.update_screen(game_settings, screen, ship)
-        screen.fill(game_settings.bg_color)
+        gf.update_bullets(bullets)
+
+        gf.update_screen(game_settings, screen, ship, bullets)
+        # screen.fill(game_settings.bg_color)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
