@@ -4,6 +4,7 @@
 import pygame
 import sys
 from bullet import Bullet
+from alien import Alien
 
 
 def check_events(game_settins, screen, ship, bullets):
@@ -13,6 +14,7 @@ def check_events(game_settins, screen, ship, bullets):
             sys.exit()
 
         elif event.type == pygame.KEYDOWN:
+            print(event.type)
             check_keydown_events(event, game_settins, screen, ship, bullets)
 
         elif event.type == pygame.KEYUP:
@@ -28,6 +30,9 @@ def check_keydown_events(event, game_settings, screen, ship, bullets):
     elif event.key == pygame.K_SPACE:
         # create a bullet
         fire_bullet(game_settings, screen, ship, bullets)
+    if event.key == pygame.K_q:
+        # exit the game
+        sys.exit()
 
 
 
@@ -39,7 +44,7 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def update_screen(ai_settings, screen, ship, bullets):
+def update_screen(ai_settings, screen, ship, aliens, bullets):
     """update the image on the screen and switch to a new screen"""
     screen.fill(ai_settings.bg_color)
 
@@ -48,6 +53,7 @@ def update_screen(ai_settings, screen, ship, bullets):
         bullet.draw_bullet()
 
     ship.blitme()
+    aliens.draw(screen)
     # make the screen visible
     pygame.display.flip()
 
@@ -63,6 +69,21 @@ def fire_bullet(game_settings, screen, ship, bullets):
     if len(bullets) < game_settings.bullets_allowed:
         new_bullet = Bullet(game_settings, screen, ship)
         bullets.add(new_bullet)
+
+def create_fleet(game_settings, screen, aliens):
+    """set up a group of aliens"""
+    alien = Alien(game_settings, screen)
+    alien_width = alien.rect.width
+    available_space_x = game_settings.screen_width - 2 * alien_width
+    number_aliens_x = int(available_space_x / (2 * alien_width))
+    print(number_aliens_x)
+
+    # set up the first line of aliens
+    for alien_number in range(number_aliens_x):
+        alien = Alien(game_settings, screen)
+        alien.x = alien_width + 2 * alien_width * alien_number
+        alien.rect.x = alien.x
+        aliens.add(alien)
 
 
 
