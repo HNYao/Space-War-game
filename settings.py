@@ -14,6 +14,7 @@ class Settings():
 
         # the speed of fighter
         self.ship_speed_factor = 0.5
+        self.ship_limit = 3
 
         # bullets
         self.bullet_speed_factor = 1
