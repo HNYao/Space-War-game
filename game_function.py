@@ -44,7 +44,7 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def update_screen(ai_settings, screen, ship, aliens, bullets):
+def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
     """update the image on the screen and switch to a new screen"""
     screen.fill(ai_settings.bg_color)
 
@@ -54,6 +54,11 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
 
     ship.blitme()
     aliens.draw(screen)
+
+    # if inactive, draw the button
+    if not stats.game_active:
+        play_button.draw_button()
+
     # make the screen visible
     pygame.display.flip()
 

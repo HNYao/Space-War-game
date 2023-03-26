@@ -6,6 +6,7 @@ from pygame.sprite import Group
 from alien import Alien
 import game_function as gf
 from game_stats import GameStats
+from button import Button
 
 
 def run_game():
@@ -28,9 +29,11 @@ def run_game():
     # create a instance to store the stats
     stats = GameStats(game_settings)
 
-
     # set the color of background
     bg_color = (0,100,200)
+
+    # create "play" button
+    play_button = Button(game_settings, screen, "Play")
 
     # the main loop of the game
     while True:
@@ -40,10 +43,9 @@ def run_game():
             ship.update()
             gf.update_bullets(game_settings, screen, ship, aliens, bullets)
             gf.update_aliens(game_settings, stats, screen, ship, aliens, bullets)
-        else:
-            sys.exit()
 
-        gf.update_screen(game_settings, screen, ship, aliens, bullets)
+
+        gf.update_screen(game_settings, screen, stats, ship, aliens, bullets, play_button)
 
 
 run_game()
