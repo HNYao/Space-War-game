@@ -8,7 +8,7 @@ from alien import Alien
 from time import sleep
 
 
-def check_events(game_settings, screen, ship, bullets):
+def check_events(game_settings, screen, stats, play_button, ship, aliens, bullets):
     """reaction to keystrokes and clicks"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -20,6 +20,32 @@ def check_events(game_settings, screen, ship, bullets):
 
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_play_button(game_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y)
+
+
+def check_play_button(game_settings, screen, stats, play_button,ship, aliens, bullets, mouse_x, mouse_y):
+    """start the game when player clicks the button"""
+    button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+    if button_clicked and not stats.game_active:
+        # activate the game
+        stats.game_active = True
+
+        # hide the cursor
+        pygame.mouse.set_visible(False)
+
+        # reset the game
+        stats.reset_stats()
+
+        # clean up the aliens and bullets
+        aliens.empty()
+        bullets.empty()
+
+        # create a new fleet of aliens and reset the ship
+        create_fleet(game_settings, screen, ship, aliens)
+        ship.center_ship()
 
 
 def check_keydown_events(event, game_settings, screen, ship, bullets):
@@ -150,6 +176,7 @@ def change_fleet_direction(game_settings, aliens):
         alien.rect.y += game_settings.fleet_drop_speed
     game_settings.fleet_direction *= -1
 
+
 def ship_hit(game_settings, stats, screen, ship, aliens, bullets):
     """react to the collision between aliens and fighter"""
     # reduce the ship_left by 1
@@ -169,6 +196,7 @@ def ship_hit(game_settings, stats, screen, ship, aliens, bullets):
 
     else:
         stats.game_active = False
+        pygame.mouse.set_visible(True)
 
 
 def check_aliens_bottom(game_settings, stats, screen, ship, aliens, bullets):
