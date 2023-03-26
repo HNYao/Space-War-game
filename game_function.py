@@ -39,6 +39,9 @@ def check_play_button(game_settings, screen, stats, play_button,ship, aliens, bu
         # reset the game
         stats.reset_stats()
 
+        # reset the settings
+        game_settings.initialize_dynamic_settings()
+
         # clean up the aliens and bullets
         aliens.empty()
         bullets.empty()
@@ -70,9 +73,12 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
+def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button):
     """update the image on the screen and switch to a new screen"""
     screen.fill(ai_settings.bg_color)
+
+    # display the score
+    sb.show_score()
 
     # redraw the bullets
     for bullet in bullets.sprites():
@@ -106,6 +112,7 @@ def check_bullet_alien_collisions(game_settings, screen, ship, aliens, bullets):
 
     if len(aliens) == 0:
         bullets.empty()
+        game_settings.increase_speed()
         create_fleet(game_settings, screen, ship, aliens)
 
 
