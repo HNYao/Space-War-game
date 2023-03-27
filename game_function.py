@@ -54,6 +54,7 @@ def check_play_button(game_settings, screen, stats, sb, play_button,ship, aliens
         sb.prep_score()
         sb.prep_high_score()
         sb.prep_level()
+        sb.prep_ships()
 
 
 def check_keydown_events(event, game_settings, screen, ship, bullets):
@@ -171,18 +172,18 @@ def get_number_rows(game_settings, ship_height, alien_height):
     return number_rows
 
 
-def update_aliens(game_settings,stats, screen, ship, aliens, bullets):
+def update_aliens(game_settings, stats, screen, sb, ship, aliens, bullets):
     """update the aliens' positions"""
     check_fleet_edges(game_settings, aliens)
     aliens.update()
 
     # check the collisions between aliens and ship
     if pygame.sprite.spritecollideany(ship, aliens):
-        ship_hit(game_settings, stats, screen, ship, aliens, bullets)
+        ship_hit(game_settings, stats, screen, sb, ship, aliens, bullets)
         print("Warning: Ship hit!!!")
 
     # check if there are any aliens at the bottom
-    check_aliens_bottom(game_settings, stats, screen, ship, aliens, bullets)
+    check_aliens_bottom(game_settings, stats, screen, sb, ship, aliens, bullets)
 
 
 def check_fleet_edges(game_settings, aliens):
@@ -200,7 +201,7 @@ def change_fleet_direction(game_settings, aliens):
     game_settings.fleet_direction *= -1
 
 
-def ship_hit(game_settings, stats, screen, ship, aliens, bullets):
+def ship_hit(game_settings, stats, screen, sb, ship, aliens, bullets):
     """react to the collision between aliens and fighter"""
     # reduce the ship_left by 1
     if stats.ships_left > 0:
@@ -217,17 +218,20 @@ def ship_hit(game_settings, stats, screen, ship, aliens, bullets):
         # stop the game for a while
         sleep(0.5)
 
+        # update scoreboard
+        sb.prep_ships()
+
     else:
         stats.game_active = False
         pygame.mouse.set_visible(True)
 
 
-def check_aliens_bottom(game_settings, stats, screen, ship, aliens, bullets):
+def check_aliens_bottom(game_settings, stats, screen, sb, ship, aliens, bullets):
     """check if there are any aliens at the bottom"""
     screen_rect = screen.get_rect()
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
-            ship_hit(game_settings,stats,screen,ship,aliens,bullets)
+            ship_hit(game_settings,stats,screen, sb, ship,aliens,bullets)
             break
 
 
